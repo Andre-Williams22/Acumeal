@@ -14,18 +14,6 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
 db = SQLAlchemy(app)
 
 # Models for Database 
-class User(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=False)
-    image_file = db.Column(db.String(20), unique=True, default='default.jpg')
-    meal_plan = db.Column(db.String(120), nullable=False)
-    password = db.Column(db.String(60), nullable=False)
-    posts = db.relationship('Post', backref='author', lazy=True)
-
-    def __repr__(self):
-        return f"User('{self.username}', '{self.email}', '{self.image_file}', '{self.meal_plan}')"
-
 class Posts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(100), unique=True, nullable=False)
@@ -37,6 +25,34 @@ class Posts(db.Model):
         return f"Post('{self.title}', '{self.date_posted}' "
     
 
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(20), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
+    meal_plan = db.Column(db.String(120), nullable=False)
+    password = db.Column(db.String(60), nullable=False)
+    posts = db.relationship('Posts', backref='author', lazy=True)
+
+    def __repr__(self):
+        return f"User('{self.username}', '{self.email}', '{self.image_file}', '{self.meal_plan}')"
+
+
+# $python 
+# from app import db
+# db.create_all()
+# from app import User, Posts
+# user_1 = User(username='corey',email='c@gmail.com',meal_plan='low', password='password')
+# db.session.add(user_1)
+# db.session.commit()
+
+# queries
+# User.query.all()
+# User.query.first()
+# User.query.filter_by(username='corey').all()
+# user = User.query.get(1)
+# user.posts
+# db.drop_all() ## deletes everything in our database
 
 posts = [
     {
