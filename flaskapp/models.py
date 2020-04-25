@@ -1,6 +1,11 @@
 from datetime import datetime 
-from flaskapp import db 
+from flaskapp import db, login_manager
+# used to manage our sessions
+from flask_login import UserMixin
 
+@login_manager.user_loader 
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 # Models for Database 
 class Posts(db.Model):
@@ -14,18 +19,20 @@ class Posts(db.Model):
         return f"Post('{self.title}', '{self.date_posted}' "
     
 
-class User(db.Model):
+class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
-    meal_plan = db.Column(db.String(120), nullable=False)
     password = db.Column(db.String(60), nullable=False)
     posts = db.relationship('Posts', backref='author', lazy=True)
+    #mealplan = db.relationship('Mealplan', backref='author', lazy=True)
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}', '{self.image_file}', '{self.meal_plan}')"
+        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
 
+# class Mealplan(db.Model):
+#     pass 
 
 # $python 
 # from flaskapp import db
@@ -33,7 +40,7 @@ class User(db.Model):
 # from flaskapp.models import User, Posts
 # user_1 = User(username='corey',email='c@gmail.com',meal_plan='low', password='password')
 # db.session.add(user_1)
-# db.session.commit()
+# db.session.commit()``
 
 # queries
 # User.query.all()
