@@ -1,6 +1,6 @@
 from flask import render_template, url_for, flash, redirect, request
 from flaskapp import app, db, bcrypt
-from flaskapp.forms import RegistrationForm, LoginForm
+from flaskapp.forms import RegistrationForm, LoginForm, QuizForm
 from flaskapp.models import User, Posts
 from flask_login import login_user, current_user, logout_user, login_required
 posts = [
@@ -20,7 +20,7 @@ posts = [
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', posts=posts)
 
 @app.route('/home')
 def home():
@@ -45,6 +45,12 @@ def registration():
 
     return render_template('registration.html', title='Registration', form=form)
 
+@app.route("/quiz", methods=['GET', 'POST'])
+def quiz():
+    form = QuizForm()
+
+    if form.validate_on_submit():
+        pass
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():

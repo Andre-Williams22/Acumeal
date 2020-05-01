@@ -3,3 +3,4 @@ ipynb_checkpoints/
 flaskapp/.DS_Store
 Datasets/.DS_Store
 Data-Science/.DS_Store
+env
