@@ -1,6 +1,5 @@
 from flask_wtf import FlaskForm # used to write forms that will convert them into html 
-from flask.ext.babel import Babel as lazy_gettext
-from flask_babel import Babel
+from flask_babel import Babel as gettext, lazy_gettext
 from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, validators
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError 
 from flaskapp.models import User 
@@ -33,16 +32,17 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Login')
 
 class QuizForm(FlaskForm):
-    name = StringField(lazy_gettext(u'Name'), [validators.InputRequired(lazy_gettext(u'Please provide your name'))])
-    age = IntegerField(lazy_gettext(u'Age'),[validators.NumberRange(min=10, message=lazy_gettext(u'Must be at least %(min)d years old.'))])
-    gender = StringField(lazy_gettext(u'Gender'), [validators.InputRequired(lazy_gettext(u'What is your gender? Male or Female'))])
-    allergies = StringField(lazy_gettext(u'Allergies'), [validators.InputRequired(lazy_gettext(u'Do you have allergies? Yes or No'))])
-    exercise = StringField(lazy_gettext(u'Exercise'), [validators.InputRequired(lazy_gettext(u'Do you workout more than 3 days a week? Yes or No'))])
-    high_bp = StringField(lazy_gettext(u'High Blood Pressure'), [validators.InputRequired(lazy_gettext(u'Do you have high blood pressure? Yes or No'))])
-    diabetes = StringField(lazy_gettext(u'Diabetes'), [validators.InputRequired(lazy_gettext(u'Do you have diabetes? Yes or No'))])
-    muscle_building = StringField(lazy_gettext(u'Strength Training'), [validators.InputRequired(lazy_gettext(u'Are you trying to build muscle? Yes or No'))])
-    weight_loss = StringField(lazy_gettext(u'Weight Loss'), [validators.InputRequired(lazy_gettext(u'Are you trying to lose weight? Yes or No'))])
-    hungry_often = StringField(lazy_gettext(u'Apetite'), [validators.InputRequired(lazy_gettext(u'Are you hungry often? Yes or No'))])
-    eat_snacks = StringField(lazy_gettext(u'Snacking'), [validators.InputRequired(lazy_gettext(u'Do you eat snacks? Yes or No'))])
+    first = StringField('First Name', [validators.InputRequired()])
+    last = StringField('Last Name', [validators.InputRequired()])
+    age = IntegerField('Age',[validators.NumberRange(min=10, message='Must be at least %(min)d years old.')])
+    gender = StringField('Gender', [validators.InputRequired(message='What is your gender? Male or Female')])
+    allergies = StringField('Do You Have Allergies? Yes or No', [validators.InputRequired(message='Do you have allergies? Yes or No')])
+    exercise = StringField('Do you Exercise More than 3 times a week? Yes or No', [validators.InputRequired(message='Do you workout more than 3 days a week? Yes or No')])
+    high_bp = StringField('Do you have High Blood Pressure? Yes or No', [validators.InputRequired(message='Do you have high blood pressure? Yes or No')])
+    diabetes = StringField('Do you have Diabetes yes or no?', [validators.InputRequired(message='Do you have diabetes? Yes or No')])
+    muscle_building = StringField('Are you trying to build muscle? Yes or No', [validators.InputRequired(message='Are you trying to build muscle? Yes or No')])
+    weight_loss = StringField('Are you trying to loss weight? Yes or No', [validators.InputRequired(message='Are you trying to lose weight? Yes or No')])
+    hungry_often = StringField('Are you hungry often? Yes or No', [validators.InputRequired(message='Are you hungry often? Yes or No')])
+    eat_snacks = StringField('Do you eat snacks? Yes or No', [validators.InputRequired(message='Do you eat snacks? Yes or No')])
 
-    submit = SubmitField('Buy Now')
+    submit = SubmitField('Buy Mealplan')

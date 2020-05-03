@@ -50,7 +50,9 @@ def quiz():
     form = QuizForm()
 
     if form.validate_on_submit():
-        pass
+        flash(f"Data stored for {form.first.data} " + f"{form.last.data}!", 'success')
+        return redirect(url_for('account'))
+    return render_template('quiz.html', title='Quiz', form=form)
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
