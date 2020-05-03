@@ -1,8 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="content-section">
-          <h2 class="account-heading"> Welcome, {{ current_user.name }}</h2>
-          <p class="text-secondary">{{ current_user.age }}</p>
-    </div>
+   
+          <h2 class="account-heading"> Welcome, {{ current_user.username }}</h2>
+          <p class="text-secondary">{{ current_user.mealplan }}</p>
 {% endblock content %}

@@ -41,7 +41,7 @@ def registration():
         db.session.add(user)
         db.session.commit()
         flash('Your account has been created! You are now able to log in', 'success')
-        return redirect(url_for('login'))
+        return redirect(url_for('quiz'))
     return render_template('registration.html', title='Registration', form=form)
 
 @app.route("/quiz", methods=['GET', 'POST'])
@@ -49,7 +49,7 @@ def quiz():
     form = QuizForm()
 
     if form.validate_on_submit():
-        flash(f"Data stored for {form.first.data} " + f"{form.last.data}!", 'success')
+        flash(f"You're meal plan is ready {form.first.data} " + f"{form.last.data}! Please Login to View Meal Plan", 'success')
         return redirect(url_for('login'))
     return render_template('quiz.html', title='Quiz', form=form)
 
@@ -58,6 +58,7 @@ def login():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     form = LoginForm()
+    quiz_data = QuizForm()
     if form.validate_on_submit():
             user = User.query.filter_by(email=form.email.data).first()
             if user and bcrypt.check_password_hash(user.password, form.password.data):
@@ -66,12 +67,14 @@ def login():
                 return redirect(next_page) if next_page else redirect(url_for('mealplan')) # a ternary conditional like a list comprehension
             else:
                 flash('Login Unsucessful. Please check email and password', 'danger')
-    return render_template('login.html', title='Login', form=form)
+    return render_template('login.html', title='Login', form=form, quiz=quiz_data)
 
 @app.route("/mealplan", methods=['GET', 'POST'])
 @login_required
 def mealplan():
     form = QuizForm()
+    age = form.age
+
 
     return render_template('mealplan.html', title='Mealplan', form=form)
 
