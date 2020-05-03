@@ -25,22 +25,44 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(120), unique=True, nullable=False)
     image_file = db.Column(db.String(20), nullable=False, default='default.jpg')
     password = db.Column(db.String(60), nullable=False)
-    posts = db.relationship('Posts', backref='author', lazy=True)
-    #mealplan = db.relationship('Mealplan', backref='author', lazy=True)
+    # not columns but is a query that allows us to grab this data from our users
+    posts = db.relationship('Posts', backref='author', lazy=True) # related to posts: 1 to many relationship
+    mealplan = db.relationship('Mealplan', backref='autho', lazy=True) # 1 to many relationship with user
+
+    def __repr__(self): # makes our object a string when it's printed when we print it out
+        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
+class Mealplan(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    first = db.Column(db.String(20), nullable=False)
+    last = db.Column(db.String(20), nullable=False)
+    age = db.Column(db.Integer, nullable=False)
+    gender = db.Column(db.String(20), nullable=False)
+    allergies = db.Column(db.String(20), nullable=False)
+    exercise = db.Column(db.String(20), nullable=False)
+    high_bp = db.Column(db.String(20), nullable=False)
+    diabetes = db.Column(db.String(20), nullable=False)
+    muscle_building = db.Column(db.String(20), nullable=False)
+    weight_loss = db.Column(db.String(20), nullable=False)
+    hungry_often = db.Column(db.String(20), nullable=False)
+    eat_snacks = db.Column(db.String(20), nullable=False)
+    # references user class that creates a relationship between meapl plan and user 
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
+        return f"MealPlan('{self.age}', {self.gender}, {self.exercise}')"
 
-# class Mealplan(db.Model):
-#     pass 
 
-# $python 
+# $ python 
 # from flaskapp import db
 # db.create_all()
-# from flaskapp.models import User, Posts
-# user_1 = User(username='corey',email='c@gmail.com',meal_plan='low', password='password')
+# from flaskapp.models import User, Posts, Mealplan
+# user_1 = User(username='corey',email='c@gmail.com', password='password')
 # db.session.add(user_1)
-# db.session.commit()``
+# db.session.commit()
+# mealplan = Mealplan(first='Andre',last='Williams',age=19,gender='male',allergies='No',exercise='Yes',high_bp='No',
+#   diabetes='No',muscle_building='Yes',weight_loss='No',hungry_often='No',eat_snacks='No', user_id=user_1)
+
+
 
 # queries
 # User.query.all()
