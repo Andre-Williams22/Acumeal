@@ -41,7 +41,7 @@ def registration():
         db.session.add(user)
         db.session.commit()
         flash('Your account has been created! You are now ready to take the quiz', 'success')
-        return redirect(url_for('home'))
+        return redirect(url_for('quiz'))
 
     return render_template('registration.html', title='Registration', form=form)
 
