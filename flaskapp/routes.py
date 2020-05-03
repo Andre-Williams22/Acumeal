@@ -54,7 +54,7 @@ def registration():
         db.session.add(user)
         db.session.commit()
         flash('Your account has been created! You are now able to log in', 'success')
-        return redirect(url_for('quiz'))
+        return redirect(url_for('login'))
     return render_template('registration.html', title='Registration', form=form)
 
 @app.route("/quiz", methods=['GET', 'POST'])
@@ -104,8 +104,8 @@ def quiz():
                 week_1 = Meal(week=week, breakfast=breakfast, lunch=lunch, dinner=dinner, snack=snack, total=total, measurement=measurement, user_id=current_user.id)
                 db.session.add(week_1)
                 db.session.commit()
-                flash(f"You're meal plan is ready {form.first.data} " + f"{form.last.data}! Please Login to View Meal Plan", 'success')
-                return redirect(url_for('login'))     
+                flash(f"You're meal plan is ready {form.first.data} " + f"{form.last.data}! Please enjoy your meal plan", 'success')
+                return redirect(url_for('mealplan'))     
 
         elif prediction == 0:
             print('Meal 2')
@@ -122,8 +122,8 @@ def quiz():
             # save prediction in database 
             db.session.add(week_1)
             db.session.commit()
-            flash(f"You're meal plan is ready {form.first.data} " + f"{form.last.data}! Please Login to View Meal Plan", 'success')
-            return redirect(url_for('login'))     
+            flash(f"You're meal plan is ready {form.first.data} " + f"{form.last.data}! Please view your meal plan", 'success')
+            return redirect(url_for('mealplan'))     
         
         # grab 
 
@@ -131,7 +131,7 @@ def quiz():
        # mealplan = Mealplan()
 
         flash(f"You're meal plan is ready {form.first.data} " + f"{form.last.data}! Please Login to View Meal Plan", 'success')
-        return redirect(url_for('login'))
+        return redirect(url_for('mealplan'))
     return render_template('quiz.html', title='Quiz', form=form)
 
 @app.route("/login", methods=['GET', 'POST'])
@@ -145,7 +145,7 @@ def login():
             if user and bcrypt.check_password_hash(user.password, form.password.data):
                 login_user(user, remember=form.remember.data)
                 next_page = request.args.get('next')
-                return redirect(next_page) if next_page else redirect(url_for('mealplan')) # a ternary conditional like a list comprehension
+                return redirect(next_page) if next_page else redirect(url_for('quiz')) # a ternary conditional like a list comprehension
             else:
                 flash('Login Unsucessful. Please check email and password', 'danger')
     return render_template('login.html', title='Login', form=form, quiz=quiz_data)
@@ -153,12 +153,30 @@ def login():
 @app.route("/mealplan", methods=['GET', 'POST'])
 @login_required
 def mealplan():
+    form = Meal()
     if current_user:
-        form = QuizForm()
-        age = form.age
+        pass
+        #return redirect(url_for('account'))
+    breakfast = form.query.first()
+    breakfast = form.query.all()
+    form = form.query.first()
 
+    hashtable = {}
+    extra = []
 
-    return render_template('mealplan.html', title='Mealplan', form=form)
+    for i in breakfast:
+        if i not in hashtable:
+            hashtable[i] = 1
+        else:
+            extra.append(i)
+
+    # for item in breakfast:
+    #     if item not in hashtable:
+    #         hashtable[item] = item
+    #     else:
+    #         extra.append(item)
+        
+    return render_template('mealplan.html', title='Mealplan', form=form, breakfast=breakfast, hash=hashtable.keys())
 
 @app.route("/logout", methods=['GET', 'POST'])
 def logout():
@@ -168,7 +186,9 @@ def logout():
 @app.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
+    meal = Meal()
+    meal = meal.query.all()
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
     #form = Mealplan()
     
-    return render_template('account.html', title='Account')
+    return render_template('account.html', title='Account', meal=meal[0:2])

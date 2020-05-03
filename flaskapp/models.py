@@ -70,7 +70,7 @@ class Meal(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
-        return f"Mealplan('{self.week}', '{self.total}', {self.measurement}')"
+        return f"{self.week}, {self.breakfast}, {self.lunch}, {self.dinner}, {self.snack}, {self.total}, {self.measurement}"
 
 # $ python 
 # from flaskapp import db
