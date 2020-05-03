@@ -31,7 +31,24 @@ class User(db.Model, UserMixin):
 
     def __repr__(self): # makes our object a string when it's printed when we print it out
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
+class Mealplan(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    first = db.Column(db.String(20), nullable=False)
+    last = db.Column(db.String(20), nullable=False)
+    age = db.Column(db.Integer, nullable=False)
+    gender = db.Column(db.String(20), nullable=False)
+    allergies = db.Column(db.String(20), nullable=False)
+    exercise = db.Column(db.String(20), nullable=False)
+    high_bp = db.Column(db.String(20), nullable=False)
+    diabetes = db.Column(db.String(20), nullable=False)
+    muscle_building = db.Column(db.String(20), nullable=False)
+    weight_loss = db.Column(db.String(20), nullable=False)
+    hungry_often = db.Column(db.String(20), nullable=False)
+    eat_snacks = db.Column(db.String(20), nullable=False)
+    # references user class that creates a relationship between meapl plan and user 
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
+<<<<<<< HEAD
 class Mealplan(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first = db.Column(db.String(20), nullable=False)
@@ -52,6 +69,11 @@ class Mealplan(db.Model):
     def __repr__(self):
         return f"MealPlan('{self.age}', {self.gender}, {self.exercise}')"
 
+=======
+    def __repr__(self):
+        return f"MealPlan('{self.age}', {self.gender}, {self.exercise}')"
+
+>>>>>>> 72252e976cc45e303a6ef588dd4c0d83af22c66e
 
 # $ python 
 # from flaskapp import db
