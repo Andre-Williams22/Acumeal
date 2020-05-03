@@ -1,8 +1,11 @@
 from flask import render_template, url_for, flash, redirect, request
 from flaskapp import app, db, bcrypt
 from flaskapp.forms import RegistrationForm, LoginForm, QuizForm
-from flaskapp.models import User, Posts
+from flaskapp.models import User, Posts, Mealplan
 from flask_login import login_user, current_user, logout_user, login_required
+from sklearn.preprocessing import LabelEncoder 
+import numpy as np 
+import pickle
 posts = [
     {
         'author': 'Andre Williams',
@@ -17,6 +20,7 @@ posts = [
         'date_posted': 'April 22, 2020'
     }
 ]
+model = pickle.load(open('decision_tree1.pkl', 'rb'))
 
 @app.route('/')
 def index():
@@ -47,8 +51,43 @@ def registration():
 @app.route("/quiz", methods=['GET', 'POST'])
 def quiz():
     form = QuizForm()
-
     if form.validate_on_submit():
+        label = LabelEncoder()
+        # grab data from form
+        age = float(request.form['age'])
+        gender = float(request.form['gender'])
+        allergies = float(request.form['allergies'])
+        bp = float(request.form['high_bp'])
+        diabetes = float(request.form['diabetes'])
+        muscle = float(request.form['muscle_building'])
+        weight = float(request.form['weight_loss'])
+        hungry = float(request.form['hungry_often'])
+        
+        # put values into a list 
+        values = [age, gender, allergies, bp, diabetes, muscle, weight, hungry]
+        print(values)
+     
+        # put values into an array
+        pred_args = np.array(values)
+        # reshape the array for model
+        new_args = pred_args.reshape(1,-1)
+        # final = [np.array(int_features)]
+        print(new_args)
+        # make predictions on model
+        prediction = model.predict(new_args)
+        print(prediction)
+
+        if prediction == 1:
+            print('Meal 1')
+        else:
+            print('Meal 2')
+
+        # save prediction in database 
+
+        # grab 
+
+       # mealplan = Mealplan()
+
         flash(f"You're meal plan is ready {form.first.data} " + f"{form.last.data}! Please Login to View Meal Plan", 'success')
         return redirect(url_for('login'))
     return render_template('quiz.html', title='Quiz', form=form)
@@ -72,8 +111,9 @@ def login():
 @app.route("/mealplan", methods=['GET', 'POST'])
 @login_required
 def mealplan():
-    form = QuizForm()
-    age = form.age
+    if current_user:
+        form = QuizForm()
+        age = form.age
 
 
     return render_template('mealplan.html', title='Mealplan', form=form)
