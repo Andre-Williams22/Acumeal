@@ -27,11 +27,15 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(60), nullable=False)
     # not columns but is a query that allows us to grab this data from our users
     posts = db.relationship('Posts', backref='author', lazy=True) # related to posts: 1 to many relationship
-    mealplan = db.relationship('Mealplan', backref='autho', lazy=True) # 1 to many relationship with user
+    mealplan = db.relationship('Mealplan', backref='author', lazy=True) # 1 to many relationship with user
+    meal = db.relationship('Meal', backref='author', lazy=True) 
+
+    #meal = db.Column(db.Integer, db.ForeignKey('meal.id'), nullable=False)
 
     def __repr__(self): # makes our object a string when it's printed when we print it out
         return f"User('{self.username}', '{self.email}', '{self.image_file}')"
 
+# quiz form data
 class Mealplan(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     first = db.Column(db.String(20), nullable=False)
@@ -50,20 +54,39 @@ class Mealplan(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
-        return f"MealPlan('{self.age}', {self.gender}, {self.exercise}')"
+        return f"MealPlan('{self.age}', '{self.gender}', '{self.exercise}')"
 
+class Meal(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    week = db.Column(db.String(20), nullable=False)
+    breakfast = db.Column(db.String(20), nullable=False)
+    lunch = db.Column(db.String(20), nullable=False)
+    dinner = db.Column(db.String(20), nullable=False)
+    snack = db.Column(db.String(20), nullable=False)
+    total = db.Column(db.String(20), nullable=False)
+    measurement = db.Column(db.String(20), nullable=False)
+    # one mealplan has many users 
+   #user = db.relationship('User', backref='user', lazy=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
+    def __repr__(self):
+        return f"Mealplan('{self.week}', '{self.total}', {self.measurement}')"
 
 # $ python 
 # from flaskapp import db
 # db.create_all()
-# from flaskapp.models import User, Posts, Mealplan
+# from flaskapp.models import User, Posts, Mealplan, Meal
 # user_1 = User(username='corey',email='c@gmail.com', password='password')
 # db.session.add(user_1)
 # db.session.commit()
 # mealplan = Mealplan(first='Andre',last='Williams',age=19,gender='male',allergies='No',exercise='Yes',high_bp='No',
 #   diabetes='No',muscle_building='Yes',weight_loss='No',hungry_often='No',eat_snacks='No', user_id=user_1)
+#  meal_1 = Meal(week='1', breakfast='oatmeal', lunch='potatoes', dinner='salad', snack='cheese', total='200', measurement='grams', user_id=user.id)
 
 
+# user = User.query.first() or User.query.get(1)
+# user.posts
+# user.meal
 
 # queries
 # User.query.all()
