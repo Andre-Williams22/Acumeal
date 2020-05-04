@@ -8,12 +8,8 @@ import numpy as np
 import pandas as pd
 import pickle
 import os
-import tablib
 import csv
-# dataset = tablib.Dataset()
-# with open(os.path.join(os.path.dirname(__file__),'High-Cal.csv')) as df:
-#     dataset.csv = df.read()
-#df = pd.read_csv('High-Cal.csv', encoding='cp1252')
+
 
 posts = [
     {
@@ -29,6 +25,7 @@ posts = [
         'date_posted': 'April 22, 2020'
     }
 ]
+# loads decision tree model 
 model = pickle.load(open('decision_tree1.pkl', 'rb'))
 
 @app.route('/')
@@ -63,6 +60,7 @@ def quiz():
     if form.validate_on_submit():
         label = LabelEncoder()
         # grab data from form
+
         age = float(request.form['age'])
         gender = float(request.form['gender'])
         allergies = float(request.form['allergies'])
@@ -89,9 +87,7 @@ def quiz():
             # df = pd.read_csv(request.file.get('High-Cal.csv'))
             with open(os.path.join(os.path.dirname(__file__),'High-Cal.csv')) as readfile:
                 df = pd.read_csv(readfile)
-            # with open(os.path.join(os.path.dirname(__file__),'High-Cal.csv')) as df:
-                # dataset.csv = df.read()
-                # df = dataset.csv
+
                 df = df.iloc[0:6]
                 week = df['High Calorie Plan'].iloc[0]
                 breakfast = df['Breakfast1'].iloc[0]
@@ -109,26 +105,23 @@ def quiz():
 
         elif prediction == 0:
             print('Meal 2')
-            data = pd.read_csv('Low-Cal.csv')
+            with open(os.path.join(os.path.dirname(__file__),'Low-Cal.csv')) as readfile:
+                data = pd.read_csv(readfile)
+            # data = pd.read_csv('Low-Cal.csv')
             data = data.iloc[0:6]
-            data['Low Calorie Plan']
-            lunch = data['Lunch']
-            dinner = data['Dinner']
-            snack = data['Snack']
-            total = data['Total']
-            week = data['High Calorie Plan']
+            data['Low Calorie Plan'].iloc[0]
+            lunch = data['Lunch'].iloc[0]
+            dinner = data['Dinner'].iloc[0]
+            snack = data['Snack'].iloc[0]
+            total = data['Total'].iloc[0]
+            week = data['High Calorie Plan'].iloc[0]
 
-            week_1 = Meal(week=week, breakfast=breakfast, lunch=lunch, dinner=dinner, snack=snack, total=total)
+            week_1 = Meal(week=week, breakfast=breakfast, lunch=lunch, dinner=dinner, snack=snack, total=total, measurement=measurement, user_id=current_user.id)
             # save prediction in database 
             db.session.add(week_1)
             db.session.commit()
             flash(f"You're meal plan is ready {form.first.data} " + f"{form.last.data}! Please view your meal plan", 'success')
             return redirect(url_for('mealplan'))     
-        
-        # grab 
-
-
-       # mealplan = Mealplan()
 
         flash(f"You're meal plan is ready {form.first.data} " + f"{form.last.data}! Please Login to View Meal Plan", 'success')
         return redirect(url_for('mealplan'))
