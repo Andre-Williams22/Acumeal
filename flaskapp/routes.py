@@ -3,7 +3,7 @@ from flaskapp import app, db, bcrypt
 from flaskapp.forms import RegistrationForm, LoginForm, QuizForm
 from flaskapp.models import User, Posts, Mealplan, Meal
 from flask_login import login_user, current_user, logout_user, login_required
-from sklearn.preprocessing import LabelEncoder 
+from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 import numpy as np 
 import pandas as pd
 import pickle
@@ -60,7 +60,6 @@ def quiz():
     if form.validate_on_submit():
         label = LabelEncoder()
         # grab data from form
-
         age = float(request.form['age'])
         gender = float(request.form['gender'])
         allergies = float(request.form['allergies'])
