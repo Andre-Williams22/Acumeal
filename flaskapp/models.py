@@ -33,7 +33,7 @@ class User(db.Model, UserMixin):
     #meal = db.Column(db.Integer, db.ForeignKey('meal.id'), nullable=False)
 
     def __repr__(self): # makes our object a string when it's printed when we print it out
-        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
+        return f"User('{self.username}', '{self.email}', '{self.image_file}', '{self.password}')"
 
 # quiz form data
 class Mealplan(db.Model):

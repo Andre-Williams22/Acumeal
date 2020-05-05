@@ -58,21 +58,42 @@ def registration():
 def quiz():
     form = QuizForm()
     if form.validate_on_submit():
-        label = LabelEncoder()
+        #label = LabelEncoder()
         # grab data from form
         age = float(request.form['age'])
-        gender = float(request.form['gender'])
-        allergies = float(request.form['allergies'])
-        bp = float(request.form['high_bp'])
-        diabetes = float(request.form['diabetes'])
-        muscle = float(request.form['muscle_building'])
-        weight = float(request.form['weight_loss'])
-        hungry = float(request.form['hungry_often'])        
+        gender = request.form['gender']
+        allergies = request.form['allergies']
+        exercise = request.form['exercise']
+        bp = request.form['high_bp']
+        diabetes = request.form['diabetes']
+        muscle = request.form['muscle_building']
+        weight = request.form['weight_loss']
+        hungry = request.form['hungry_often']
+        eat_snacks = request.form['eat_snacks']
         # put values into a list 
-        values = [age, gender, allergies, bp, diabetes, muscle, weight, hungry]
-        #print(values)
+        values = [gender, allergies, exercise, bp, diabetes, muscle, weight, hungry, eat_snacks]
+        new_values = []
+        # converts strings to numbers like label encoder 
+        for item in values:
+            if item == 'Male' or 'male':
+                item = 1
+                item = float(item)
+                new_values.append(item)
+            elif item == 'Female' or item == 'female':
+                item = 0
+                item = float(item)
+                new_values.append(item)
+            elif item == 'Yes' or item == 'yes':
+                item = 1
+                item = float(item)
+                new_values.append(item)
+            else:
+                item = 0
+                item = float(item)
+                new_values.append(item)
+        #print(new_values)
         # put values into an array
-        pred_args = np.array(values)
+        pred_args = np.array(new_values)
         # reshape the array for model
         new_args = pred_args.reshape(1,-1)
         # final = [np.array(int_features)]

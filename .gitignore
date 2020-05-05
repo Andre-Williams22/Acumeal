@@ -4,3 +4,5 @@ flaskapp/.DS_Store
 Datasets/.DS_Store
 Data-Science/.DS_Store
 env
+.ipynb_checkpoints
+__pycache__

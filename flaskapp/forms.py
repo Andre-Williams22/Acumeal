@@ -45,4 +45,4 @@ class QuizForm(FlaskForm):
     hungry_often = StringField('Are you hungry often? Yes or No', [validators.InputRequired(message='Are you hungry often? Yes or No')])
     eat_snacks = StringField('Do you eat snacks? Yes or No', [validators.InputRequired(message='Do you eat snacks? Yes or No')])
 
-    submit = SubmitField('Buy Mealplan')
+    submit = SubmitField('View Free Plan')
