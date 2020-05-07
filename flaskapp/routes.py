@@ -26,7 +26,7 @@ posts = [
     }
 ]
 # loads decision tree model 
-model = pickle.load(open('decision_tree1.pkl', 'rb'))
+model = pickle.load(open('decisiontree2.pkl', 'rb'))
 
 @app.route('/')
 def index():
@@ -71,7 +71,7 @@ def quiz():
         hungry = request.form['hungry_often']
         eat_snacks = request.form['eat_snacks']
         # put values into a list 
-        values = [gender, allergies, exercise, bp, diabetes, muscle, weight, hungry, eat_snacks]
+        values = [eat_snacks,exercise, allergies,gender, bp, diabetes, muscle, weight, hungry]
         new_values = []
         # converts strings to numbers like label encoder 
         for item in values:
@@ -92,6 +92,9 @@ def quiz():
                 item = float(item)
                 new_values.append(item)
         #print(new_values)
+        
+        # add age list 
+        new_values.insert(0,age)
         # put values into an array
         pred_args = np.array(new_values)
         # reshape the array for model
@@ -108,13 +111,13 @@ def quiz():
             with open(os.path.join(os.path.dirname(__file__),'High-Cal.csv')) as readfile:
                 df = pd.read_csv(readfile)
 
-                df = df.iloc[0:6]
-                week = df['High Calorie Plan'].iloc[0]
+                df = df.iloc[1:6]
+                week = df['Breakfast1'].iloc[0]
                 breakfast = df['Breakfast1'].iloc[0]
                 lunch = df['Lunch'].iloc[0]
                 dinner = df['Dinner'].iloc[0]
                 snack = df['Snack'].iloc[0]
-                total = df['Total'].iloc[0]
+                total = df['Total'].iloc[1]
                 measurement = df['Measurement'].iloc[0]
                 
                 week_1 = Meal(week=week, breakfast=breakfast, lunch=lunch, dinner=dinner, snack=snack, total=total, measurement=measurement, user_id=current_user.id)
@@ -128,19 +131,23 @@ def quiz():
             with open(os.path.join(os.path.dirname(__file__),'Low-Cal.csv')) as readfile:
                 data = pd.read_csv(readfile)
             # data = pd.read_csv('Low-Cal.csv')
-            data = data.iloc[0:6]
-            data['Low Calorie Plan'].iloc[0]
+            data = data.iloc[1:6]
+            #data['Low Calorie Plan'].iloc[0]
+            breakfast = data['Breakfast'].iloc[0]
             lunch = data['Lunch'].iloc[0]
             dinner = data['Dinner'].iloc[0]
             snack = data['Snack'].iloc[0]
             total = data['Total'].iloc[0]
-            week = data['High Calorie Plan'].iloc[0]
+            week = data['Low Calorie Plan'].iloc[0]
+            measurement = data['Measurement'].iloc[0]
+            print(breakfast)
+            print(lunch)
 
             week_1 = Meal(week=week, breakfast=breakfast, lunch=lunch, dinner=dinner, snack=snack, total=total, measurement=measurement, user_id=current_user.id)
             # save prediction in database 
             db.session.add(week_1)
             db.session.commit()
-            flash(f"You're meal plan is ready {form.first.data} " + f"{form.last.data}! Please view your meal plan", 'success')
+            flash(f"You're meal plan is ready {form.first.data} " + f"{form.last.data}! Please view your meal plan: " + f"{week_1}", 'success')
             return redirect(url_for('mealplan'))     
 
         flash(f"You're meal plan is ready {form.first.data} " + f"{form.last.data}! Please Login to View Meal Plan", 'success')
@@ -162,34 +169,41 @@ def login():
             else:
                 flash('Login Unsucessful. Please check email and password', 'danger')
     return render_template('login.html', title='Login', form=form, quiz=quiz_data)
+@app.route("/normlogin", methods=['GET', 'POST'])
+def normlogin():
+    if current_user.is_authenticated:
+        return redirect(url_for('mealplan'))
+
+    form = LoginForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user and bcrypt.check_password_hash(user.password, form.password.data):
+            login_user(user, remember=form.remember.data)
+            next_page = request.args.get('next')
+            return redirect(next_page) if next_page else redirect(url_for('home'))
+        else:
+            flash('Login Unsuccessful. Please check email and password', 'danger')
+    return render_template('normlogin.html', title='Login', form=form)
 
 @app.route("/mealplan", methods=['GET', 'POST'])
 @login_required
 def mealplan():
-    form = Meal()
-    if current_user:
-        pass
+    #form = Meal()
+    #print(form)
+
+    user = current_user
+    meal = user.meal[0]
+
         #return redirect(url_for('account'))
-    breakfast = form.query.first()
-    breakfast = form.query.all()
-    form = form.query.first()
-
-    hashtable = {}
-    extra = []
-
-    for i in breakfast:
-        if i not in hashtable:
-            hashtable[i] = 1
-        else:
-            extra.append(i)
-
-    # for item in breakfast:
-    #     if item not in hashtable:
-    #         hashtable[item] = item
-    #     else:
-    #         extra.append(item)
+    # breakfast = form.query.first()
+    # breakfast = form.query.all()
+    # form = form.query.first()
+    # print(form)
         
-    return render_template('mealplan.html', title='Mealplan', form=form, breakfast=breakfast, hash=hashtable.keys())
+    mp = Mealplan()
+    b1 = mp.query.first()
+
+    return render_template('mealplan.html', title='Mealplan', form=meal)
 
 @app.route("/logout", methods=['GET', 'POST'])
 def logout():
@@ -199,9 +213,11 @@ def logout():
 @app.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
-    meal = Meal()
-    meal = meal.query.all()
+    # meal = Meal()
+    # meal = meal.query.all()
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
-    #form = Mealplan()
+
+    meal = Meal()
     
-    return render_template('account.html', title='Account', meal=meal[0:2])
+    
+    return render_template('account.html', title='Account', meal=meal)

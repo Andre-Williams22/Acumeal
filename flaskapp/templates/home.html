@@ -1,5 +1,13 @@
 {% extends 'base.html' %}
 
+{% if current_user.is_authenticated %}
+    {% block meal %}
+
+    {% endblock meal %}
+
+{% endif %}
+
+
 {% block content %}
 
     {% for post in posts %}
