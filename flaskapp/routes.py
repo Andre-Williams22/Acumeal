@@ -150,9 +150,28 @@ def quiz():
             flash(f"You're meal plan is ready {form.first.data} " + f"{form.last.data}! Please view your meal plan: " + f"{week_1}", 'success')
             return redirect(url_for('mealplan'))     
 
+
+        else:
+            print('Meal 3')
+            with open(os.path.join(os.path.dirname(__file__), 'Maintain.csv')) as readfile: 
+                df = pd.read_csv(readfile)
+            breakfast = df['Unnamed: 1'].iloc[0]
+            lunch = df['Unnamed: 2'].iloc[0]
+            dinner = df['Unnamed: 3'].iloc[0]
+            snack = df['Unnamed: 4'].iloc[0]
+            calories = df['Unnamed: 5'].iloc[1]
+            measurement = df['Unnamed: 6'].iloc[1]
+
+            week_1 = Meal(week=week, breakfast=breakfast, lunch=lunch, dinner=dinner, snack=snack, total=total, measurement=measurement, user_id=current_user.id)
+            db.session.add(week_1)
+            db.session.commit()
+            flash(f"You're meal plan is ready {form.first.data} " + f"{form.last.data}! Please view your meal plan: " + f"{week_1}", 'success')
+            return redirect(url_for('mealplan'))              
+
         flash(f"You're meal plan is ready {form.first.data} " + f"{form.last.data}! Please Login to View Meal Plan", 'success')
         return redirect(url_for('mealplan'))
     return render_template('quiz.html', title='Quiz', form=form)
+
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
