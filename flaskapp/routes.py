@@ -105,20 +105,20 @@ def quiz():
         prediction = model.predict(new_args)
         print(prediction)
 
-        if prediction == 1:
-            print('Meal 1')
+        if prediction == 0:
+            print('Male Low Cal')
             # df = pd.read_csv(request.file.get('High-Cal.csv'))
-            with open(os.path.join(os.path.dirname(__file__),'High-Cal.csv')) as readfile:
+            with open(os.path.join(os.path.dirname(__file__),'Low-Cal.csv')) as readfile:
                 df = pd.read_csv(readfile)
 
                 df = df.iloc[1:6]
                 week = df['Breakfast1'].iloc[0]
-                breakfast = df['Breakfast1'].iloc[0]
-                lunch = df['Lunch'].iloc[0]
-                dinner = df['Dinner'].iloc[0]
-                snack = df['Snack'].iloc[0]
-                total = df['Total'].iloc[1]
-                measurement = df['Measurement'].iloc[0]
+                breakfast = df['Breakfast1'].iloc[1]
+                lunch = df['Lunch'].iloc[1]
+                dinner = df['Dinner'].iloc[1]
+                snack = df['Snack'].iloc[1]
+                total = df['Total'].iloc[2]
+                measurement = df['Measurement'].iloc[2]
                 
                 week_1 = Meal(week=week, breakfast=breakfast, lunch=lunch, dinner=dinner, snack=snack, total=total, measurement=measurement, user_id=current_user.id)
                 db.session.add(week_1)
@@ -126,9 +126,9 @@ def quiz():
                 flash(f"You're meal plan is ready {form.first.data} " + f"{form.last.data}! Please enjoy your meal plan", 'success')
                 return redirect(url_for('mealplan'))     
 
-        elif prediction == 0:
-            print('Meal 2')
-            with open(os.path.join(os.path.dirname(__file__),'Low-Cal.csv')) as readfile:
+        elif prediction == 1:
+            print('Male High Cal')
+            with open(os.path.join(os.path.dirname(__file__),'High-Cal.csv')) as readfile:
                 data = pd.read_csv(readfile)
             # data = pd.read_csv('Low-Cal.csv')
             data = data.iloc[1:6]
@@ -137,7 +137,7 @@ def quiz():
             lunch = data['Lunch'].iloc[0]
             dinner = data['Dinner'].iloc[0]
             snack = data['Snack'].iloc[0]
-            total = data['Total'].iloc[0]
+            total = data['Total'].iloc[1]
             week = data['Low Calorie Plan'].iloc[0]
             measurement = data['Measurement'].iloc[0]
             print(breakfast)
@@ -148,28 +148,84 @@ def quiz():
             db.session.add(week_1)
             db.session.commit()
             flash(f"You're meal plan is ready {form.first.data} " + f"{form.last.data}! Please view your meal plan: " + f"{week_1}", 'success')
-            return redirect(url_for('mealplan'))     
+            return redirect(url_for('mealplan'))   
 
-
-        else:
-            print('Meal 3')
-            with open(os.path.join(os.path.dirname(__file__), 'Maintain.csv')) as readfile: 
+        elif prediction == 2:
+            print('Male Maintain')
+            with open(os.path.join(os.path.dirname(__file__), 'High-Cal.csv')) as readfile:
                 df = pd.read_csv(readfile)
-            breakfast = df['Unnamed: 1'].iloc[0]
-            lunch = df['Unnamed: 2'].iloc[0]
-            dinner = df['Unnamed: 3'].iloc[0]
-            snack = df['Unnamed: 4'].iloc[0]
-            calories = df['Unnamed: 5'].iloc[1]
-            measurement = df['Unnamed: 6'].iloc[1]
+            df = df.iloc[1:6]
+            breakfast = df['Breakfast'].iloc[0]
+            lunch = df['Lunch'].iloc[0]
+            dinner = df['Dinner'].iloc[0]
+            snack = df['Snack'].iloc[0]
+            total = df['Total'].iloc[1]
+            measurement = df['Measurement'].iloc[0]
 
             week_1 = Meal(week=week, breakfast=breakfast, lunch=lunch, dinner=dinner, snack=snack, total=total, measurement=measurement, user_id=current_user.id)
+            # save prediction in database 
             db.session.add(week_1)
             db.session.commit()
             flash(f"You're meal plan is ready {form.first.data} " + f"{form.last.data}! Please view your meal plan: " + f"{week_1}", 'success')
-            return redirect(url_for('mealplan'))              
+            return redirect(url_for('mealplan'))   
 
-        flash(f"You're meal plan is ready {form.first.data} " + f"{form.last.data}! Please Login to View Meal Plan", 'success')
-        return redirect(url_for('mealplan'))
+        elif prediction == 3:
+            print('Female Maintain')
+            with open(os.path.join(os.path.dirname(__file__), 'High-Cal.csv')) as readfile:
+                df = pd.read_csv(readfile)
+            df = df.iloc[1:6]
+            breakfast = df['Breakfast'].iloc[0]
+            lunch = df['Lunch'].iloc[0]
+            dinner = df['Dinner'].iloc[0]
+            snack = df['Snack'].iloc[0]
+            total = df['Total'].iloc[1]
+            measurement = df['Measurement'].iloc[0]
+
+            week_1 = Meal(week=week, breakfast=breakfast, lunch=lunch, dinner=dinner, snack=snack, total=total, measurement=measurement, user_id=current_user.id)
+            # save prediction in database 
+            db.session.add(week_1)
+            db.session.commit()
+            flash(f"You're meal plan is ready {form.first.data} " + f"{form.last.data}! Please view your meal plan: " + f"{week_1}", 'success')
+            return redirect(url_for('mealplan')) 
+
+        elif prediction == 4:
+            print('Female Low Cal')
+            with open(os.path.join(os.path.dirname(__file__), 'High-Cal.csv')) as readfile:
+                df = pd.read_csv(readfile)
+            df = df.iloc[1:6]
+            breakfast = df['Breakfast'].iloc[0]
+            lunch = df['Lunch'].iloc[0]
+            dinner = df['Dinner'].iloc[0]
+            snack = df['Snack'].iloc[0]
+            total = df['Total'].iloc[1]
+            measurement = df['Measurement'].iloc[0]
+
+            week_1 = Meal(week=week, breakfast=breakfast, lunch=lunch, dinner=dinner, snack=snack, total=total, measurement=measurement, user_id=current_user.id)
+            # save prediction in database 
+            db.session.add(week_1)
+            db.session.commit()
+            flash(f"You're meal plan is ready {form.first.data} " + f"{form.last.data}! Please view your meal plan: " + f"{week_1}", 'success')
+            return redirect(url_for('mealplan')) 
+
+        else:
+            print('Female High Cal')
+            with open(os.path.join(os.path.dirname(__file__), 'High-Cal.csv')) as readfile:
+                df = pd.read_csv(readfile)
+            df = df.iloc[1:6]
+            breakfast = df['Breakfast'].iloc[0]
+            lunch = df['Lunch'].iloc[0]
+            dinner = df['Dinner'].iloc[0]
+            snack = df['Snack'].iloc[0]
+            total = df['Total'].iloc[1]
+            measurement = df['Measurement'].iloc[0]
+
+            week_1 = Meal(week=week, breakfast=breakfast, lunch=lunch, dinner=dinner, snack=snack, total=total, measurement=measurement, user_id=current_user.id)
+            # save prediction in database 
+            db.session.add(week_1)
+            db.session.commit()
+            flash(f"You're meal plan is ready {form.first.data} " + f"{form.last.data}! Please view your meal plan: " + f"{week_1}", 'success')
+            return redirect(url_for('mealplan')) 
+          
     return render_template('quiz.html', title='Quiz', form=form)
 
 
@@ -213,7 +269,7 @@ def mealplan():
     user = current_user
     meal = user.meal[0]
 
-        #return redirect(url_for('account'))
+    #return redirect(url_for('account'))
     # breakfast = form.query.first()
     # breakfast = form.query.all()
     # form = form.query.first()
@@ -236,7 +292,8 @@ def account():
     # meal = meal.query.all()
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
 
-    meal = Meal()
+    user = current_user 
+    meal = user.meal[0]
     
     
     return render_template('account.html', title='Account', meal=meal)
