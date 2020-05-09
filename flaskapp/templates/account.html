@@ -13,8 +13,8 @@
         <div class="media-body">
           <h2 class="account-heading"> Welcome, {{ current_user.username }}</h2>
           <p class="text-secondary">{{ current_user.email }}</p>
-          <p class="text-secondary">{{ meal.breakfast }}</p>
-          <p class="text-secondary">{{ meal.lunch }}</p>
-          <p class="text-secondary">{{ meal.dinner }}</p>
+          <p class="text-secondary"> Breakfast: {{ meal.breakfast }}</p>
+          <p class="text-secondary">Lunch: {{ meal.lunch }}</p>
+          <p class="text-secondary">Dinner: {{ meal.dinner }}</p>
         </div>
 {% endblock content %}
