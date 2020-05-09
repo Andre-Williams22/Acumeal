@@ -27,7 +27,7 @@ posts = [
 ]
 # loads decision tree model 
 model = pickle.load(open('decisiontree2.pkl', 'rb'))
-
+rfc = pickle.load(open('random_forest.pkl', 'rb'))
 @app.route('/')
 def index():
     return render_template('index.html', posts=posts)
