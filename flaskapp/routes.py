@@ -1,6 +1,6 @@
 from flask import render_template, url_for, flash, redirect, request
 from flaskapp import app, db, bcrypt
-from flaskapp.forms import RegistrationForm, LoginForm, QuizForm
+from flaskapp.forms import RegistrationForm, LoginForm, QuizForm, UpdateAccountForm
 from flaskapp.models import User, Posts, Mealplan, Meal
 from flask_login import login_user, current_user, logout_user, login_required
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
@@ -9,6 +9,7 @@ import pandas as pd
 import pickle
 import os
 import csv
+import secrets
 
 
 posts = [
@@ -291,15 +292,40 @@ def logout():
     logout_user()
     return redirect(url_for('index'))
 
+def save_picture(form_picture):
+    random_hex = secrets.token_hex(8)
+    # returns filename with and without extension
+    f_name, f_ext = os.path.splitext(form_picture.filename)
+    picture_fn = random_hex + f_ext 
+    picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
+    form_picture.save(picture_path)
+
+    return picture_fn
+
 @app.route("/account", methods=['GET', 'POST'])
 @login_required
 def account():
     # meal = Meal()
     # meal = meal.query.all()
+    account_form = UpdateAccountForm()
+    if account_form.validate_on_submit():
+        if account_form.picture.data:
+            picture_file = save_picture(account_form.picture.data)
+            current_user.image_file = picture_file 
+
+        current_user.username = account_form.username.data 
+        current_user.email = account_form.email.data
+        db.session.commit()
+        flash('your account has been updates!', 'success')
+        return redirect(url_for('account'))
+    elif request.method == 'GET':
+        account_form.username.data = current_user.username
+        account_form.email.data = current_user.email
+
     image_file = url_for('static', filename='profile_pics/' + current_user.image_file)
 
     user = current_user 
     meal = user.meal[1]
     
     
-    return render_template('account.html', title='Account', meal=meal)
+    return render_template('account.html', title='Account', meal=meal, image_file=image_file, form=account_form)
