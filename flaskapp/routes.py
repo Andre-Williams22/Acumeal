@@ -1,4 +1,6 @@
 from flask import render_template, url_for, flash, redirect, request
+import secrets
+from PIL import Image
 from flaskapp import app, db, bcrypt
 from flaskapp.forms import RegistrationForm, LoginForm, QuizForm, UpdateAccountForm
 from flaskapp.models import User, Posts, Mealplan, Meal
@@ -9,7 +11,7 @@ import pandas as pd
 import pickle
 import os
 import csv
-import secrets
+
 
 
 posts = [
@@ -298,7 +300,13 @@ def save_picture(form_picture):
     f_name, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext 
     picture_path = os.path.join(app.root_path, 'static/profile_pics', picture_fn)
-    form_picture.save(picture_path)
+    
+    # resize the image
+    output_size = (125, 125)
+    i = Image.open(form_picture)
+    i.thumbnail(output_size)
+
+    i.save(picture_path)
 
     return picture_fn
 
