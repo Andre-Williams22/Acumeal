@@ -6,3 +6,4 @@ Data-Science/.DS_Store
 env
 .ipynb_checkpoints
 __pycache__
+flaskapp/__pycache__/

@@ -1,9 +1,10 @@
 body {
-    background: #fafafa;
-    color: #333333;
+    background: lightcyan;
+    color: black;
     margin-top: 5rem;
   }
   
+
   h1, h2, h3, h4, h5, h6 {
     color: #444444;
   }
@@ -78,3 +79,10 @@ body {
   .account-heading {
     font-size: 2.5rem;
   }
+
+.carousel-item {
+  text-align:center;
+}
+.carousel-inner{
+  text-align:center;
+}

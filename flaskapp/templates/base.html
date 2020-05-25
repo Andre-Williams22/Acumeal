@@ -28,6 +28,7 @@
             <div class="navbar-nav mr-auto">
               <a class="nav-item nav-link" href="{{ url_for("index")}}">Home</a>
               <a class="nav-item nav-link" href="{{ url_for("about") }}">About</a>
+              <a class="nav-item nav-link" href="{{ url_for("contact") }}">Contact</a>
               {% block meal %}<a class="nav-item nav-link" href="{{ url_for("registration") }}">Get Mealplan</a> {% endblock meal %}
             </div>
             <!-- Navbar Right Side -->
@@ -36,10 +37,6 @@
               <a class="nav-item nav-link" href="{{ url_for("mealplan") }}">Meal Plan</a> 
               <a class="nav-item nav-link" href="{{ url_for("account") }}">Account</a> 
               <a class="nav-item nav-link" href="{{ url_for("logout") }}">Logout</a>
-
-
-
-
             {% else %}
               <a class="nav-item nav-link" href="{{ url_for("normlogin") }}">Login</a>
               <a class="nav-item nav-link" href="{{ url_for("registration") }}">Register</a>
@@ -63,6 +60,8 @@
             {% endwith %}
           {% block content %}{% endblock %}
         </div>
+
+        {% block side %}
         <div class="col-md-4">
           <div class="content-section">
             <h3>Our Sidebar</h3>
@@ -76,10 +75,10 @@
             </p>
           </div>
         </div>
+
+        {% endblock side%}
       </div>
     </main>
-
-
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
