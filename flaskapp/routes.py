@@ -78,6 +78,7 @@ def quiz():
         eat_snacks = request.form['eat_snacks']
         # put values into a list 
         values = [eat_snacks,exercise, allergies,gender, bp, diabetes, muscle, weight, hungry]
+        # new values converted to numbers for ml model 
         new_values = []
         # converts strings to numbers like label encoder 
         for item in values:
