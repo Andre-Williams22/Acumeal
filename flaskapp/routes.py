@@ -341,3 +341,10 @@ def account():
     
     
     return render_template('account.html', title='Account', meal=meal, image_file=image_file, form=account_form)
+
+
+
+@app.route("/post/new")
+@login_required
+def new_post():
+    return render_template('create_post.html', title='New Post')
