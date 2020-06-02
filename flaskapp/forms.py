@@ -71,3 +71,7 @@ class UpdateAccountForm(FlaskForm):
 
             if email:
                 raise ValidationError('That email is already taken. Please choose a different one.')
+
+# code for posts
+class PostForm(FlaskForm):
+    title = StringField('Title', validators=[DataRequired()])
