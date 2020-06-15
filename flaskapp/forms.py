@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm # used to write forms that will convert them into html 
 from flask_babel import Babel as gettext, lazy_gettext
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, validators
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, IntegerField, validators, TextAreaField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError 
 from flaskapp.models import User 
 from flask_login import current_user 
@@ -71,7 +71,11 @@ class UpdateAccountForm(FlaskForm):
 
             if email:
                 raise ValidationError('That email is already taken. Please choose a different one.')
-
-# code for posts
+    # code for posts
 class PostForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
+    content = TextAreaField('Content', validators=[DataRequired()])
+    submit = SubmitField('Post')
+
+
+

@@ -1,42 +1,30 @@
-from flask import render_template, url_for, flash, redirect, request
+import os
 import secrets
 from PIL import Image
+from flask import render_template, url_for, flash, redirect, request, abort
 from flaskapp import app, db, bcrypt
-from flaskapp.forms import RegistrationForm, LoginForm, QuizForm, UpdateAccountForm
+from flaskapp.forms import RegistrationForm, LoginForm, QuizForm, UpdateAccountForm, PostForm 
 from flaskapp.models import User, Posts, Mealplan, Meal
 from flask_login import login_user, current_user, logout_user, login_required
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder
 import numpy as np 
 import pandas as pd
 import pickle
-import os
 import csv
 
-
-
-posts = [
-    {
-        'author': 'Andre Williams',
-        'title': 'Meal Plan 1',
-        'content': 'First Post Content',
-        'date_posted': 'April 20, 2020'
-    },
-        {
-        'author': 'Lauren Williams',
-        'title': 'Meal Plan 2',
-        'content': 'Second Post Content',
-        'date_posted': 'April 22, 2020'
-    }
-]
 # loads decision tree model 
 model = pickle.load(open('decisiontree2.pkl', 'rb'))
 rfc = pickle.load(open('random_forest.pkl', 'rb'))
 @app.route('/')
 def index():
+    posts = Posts.query.all()
+
     return render_template('index.html', posts=posts)
 
 @app.route('/home')
 def home():
+    posts = Posts.query.all()
+
     return render_template('home.html', posts=posts)
 
 @app.route("/about")
@@ -230,7 +218,7 @@ def quiz():
             snack = df['Snack'].iloc[0]
             total = df['Total'].iloc[1]
             measurement = df['Measurement'].iloc[0]
-
+            
             week_1 = Meal(week=week, breakfast=breakfast, lunch=lunch, dinner=dinner, snack=snack, total=total, measurement=measurement, user_id=current_user.id)
             # save prediction in database 
             db.session.add(week_1)
@@ -260,7 +248,6 @@ def login():
 def normlogin():
     if current_user.is_authenticated:
         return redirect(url_for('mealplan'))
-
     form = LoginForm()
     if form.validate_on_submit():
         user = User.query.filter_by(email=form.email.data).first()
@@ -277,7 +264,6 @@ def normlogin():
 def mealplan():
     #form = Meal()
     #print(form)
-
     user = current_user
     print(user)
     meal = user.meal
@@ -344,7 +330,41 @@ def account():
 
 
 
-@app.route("/post/new")
+@app.route("/post/new", methods=['GET', 'POST'])
 @login_required
 def new_post():
-    return render_template('create_post.html', title='New Post')
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Posts(title=form.title.data, content=form.content.data, author=current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash('Your post has been created!', 'success')
+        return redirect(url_for('home'))
+
+    
+    return render_template('create_post.html', form=form, title='New Post', legend='New Post')
+
+
+@app.route("/post/<int:post_id>")
+def post(post_id):
+    post = Posts.query.get_or_404(post_id)
+    return render_template('post.html', title=post.title, post=post)
+
+@app.route("/post/<int:post_id>/update", methods=['GET', 'POST'])
+@login_required
+def update_post(post_id):
+    post = Posts.query.get_or_404(post_id)
+    if post.author != current_user:
+        abort(403)
+    form = PostForm()
+    if form.validate_on_submit():
+        post.title = form.title.data
+        post.content = form.content.data
+        db.session.commit()
+        flash('Your post has been updated!', 'success')
+        return redirect(url_for('post', post_id=post.id))
+    elif request.method == 'GET':
+        form.title.data = post.title
+        form.content.data = post.content
+        
+    return render_template('create_post.html', title='Update Post', form=form, legend='Update Post')
