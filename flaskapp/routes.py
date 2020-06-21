@@ -17,8 +17,9 @@ model = pickle.load(open('decisiontree2.pkl', 'rb'))
 rfc = pickle.load(open('random_forest.pkl', 'rb'))
 @app.route('/')
 def index():
-    page = request.args.get('page', 10, type=int)
-    posts = Posts.query.order_by(Posts.date_posted.desc()).paginate(page=page, per_page=1)
+    page = request.args.get('page', 1, type=int)
+    posts = Posts.query.order_by(Posts.date_posted.desc()).paginate(page=page, per_page=10)
+
     return render_template('home.html', posts=posts)
 
 @app.route('/home')
@@ -383,3 +384,13 @@ def delete_post(post_id):
     flash('Your post has been deleted!', 'success')
     return redirect(url_for('home'))
 
+@app.route("/user/<string:username>")
+def user_posts(username):
+    page = request.args.get('page', 1, type=int)
+    # this says to get the first user with this username 
+    user = User.query.filter_by(username=username).first_or_404()
+    posts = Posts.query.filter_by(author=user)\
+        .order_by(Posts.date_posted.desc())\
+        .paginate(page=page, per_page=10)
+
+    return render_template('user_posts.html', posts=posts, user=user)
