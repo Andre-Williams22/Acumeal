@@ -19,7 +19,7 @@ rfc = pickle.load(open('random_forest.pkl', 'rb'))
 def index():
     posts = Posts.query.all()
 
-    return render_template('index.html', posts=posts)
+    return render_template('home.html', posts=posts)
 
 @app.route('/home')
 def home():

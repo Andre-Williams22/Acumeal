@@ -20,6 +20,20 @@ class Posts(db.Model):
     def __repr__(self):
         return f"Post('{self.title}', '{self.date_posted}' "
 
+#python 
+# posts = Posts.query.all()
+# for post in posts:
+#     print(post)
+
+# posts = Posts.query.paginate(page=2, per_page=5)
+# posts
+# dir(posts)
+# posts.per_page
+# posts.page
+
+# for post in posts.items:
+#     print(post)
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(20), unique=True, nullable=False)
