@@ -17,12 +17,14 @@ model = pickle.load(open('decisiontree2.pkl', 'rb'))
 rfc = pickle.load(open('random_forest.pkl', 'rb'))
 @app.route('/')
 def index():
-    posts = Posts.query.all()
-
+    page = request.args.get('page', 1, type=int)
+    posts = Posts.query.paginate(page=page, per_page=1)
     return render_template('home.html', posts=posts)
 
 @app.route('/home')
 def home():
+    page = request.args.get('page', 1, type=int)
+    posts = Posts.query.paginate(per_page=5)
     posts = Posts.query.all()
 
     return render_template('home.html', posts=posts)
