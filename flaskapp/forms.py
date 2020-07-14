@@ -6,6 +6,9 @@ from flaskapp.models import User
 from flask_login import current_user 
 from flask_wtf.file import FileField, FileAllowed
 
+
+# All for forms that people will write to 
+
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
     email = StringField('Email', validators=[DataRequired(), Email()])
