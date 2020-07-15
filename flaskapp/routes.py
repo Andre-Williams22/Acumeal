@@ -18,23 +18,14 @@ rfc = pickle.load(open('random_forest.pkl', 'rb'))
 @app.route('/')
 def index():
     page = request.args.get('page', 1, type=int)
-<<<<<<< HEAD
-    posts = Posts.query.paginate(page=page, per_page=1)
-=======
     posts = Posts.query.order_by(Posts.date_posted.desc()).paginate(page=page, per_page=10)
 
->>>>>>> b268ed71196ae68e410120c67f2bcdf05193f9a4
     return render_template('home.html', posts=posts)
 
 @app.route('/home')
 def home():
     page = request.args.get('page', 1, type=int)
-<<<<<<< HEAD
-    posts = Posts.query.paginate(per_page=5)
-    posts = Posts.query.all()
-=======
     posts = Posts.query.order_by(Posts.date_posted.desc()).paginate(page=page, per_page=10)
->>>>>>> b268ed71196ae68e410120c67f2bcdf05193f9a4
 
     return render_template('home.html', posts=posts)
 
