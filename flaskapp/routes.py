@@ -36,6 +36,7 @@ def about():
 def contact():
     return render_template('contact.html', title='Contact')
 
+# registration 
 @app.route("/registration", methods=['GET', 'POST'])
 def registration():
     if current_user.is_authenticated:
