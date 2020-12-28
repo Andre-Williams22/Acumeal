@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+
+    {% if title %}
+        <title>Flask Blog - {{ title }}</title>
+    {% else %}
+        <title>Flask Blog</title>
+    {% endif %}
+</head>
+<body>
+    <header class="site-header">
+      <nav class="navbar navbar-expand-md navbar-dark bg-steel fixed-top">
+        <div class="container">
+          <a class="navbar-brand mr-4" href="/">Welcome To Acumeal</a>
+          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarToggle">
+            <div class="navbar-nav mr-auto">
+              <a class="nav-item nav-link" href="{{ url_for("index")}}">Home</a>
+              <a class="nav-item nav-link" href="{{ url_for("about") }}">About</a>
+            </div>
+            <div class="navbar-nav">
+            {% if current_user.is_authenticated %}
+              <a class="nav-item nav-link" href="{{ url_for("mealplan") }}">Meal Plan</a> 
+              <a class="nav-item nav-link" href="{{ url_for("account") }}">Account</a> 
+              <a class="nav-item nav-link" href="{{ url_for("logout") }}">Logout</a>
+            {% else %}
+              <a class="nav-item nav-link" href="{{ url_for("normlogin") }}">Login</a>
+              <a class="nav-item nav-link" href="{{ url_for("registration") }}">Register</a>
+            {% endif%}
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main role="main" class="container">
+      <div class="row">
+        <div class="col-md-8">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class='alert alert-{{ category }}'>
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+        </div>
+      </div>
+    </main>
+
+       <center> <h1> About Us </h1>
+
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+    </ol>
+    <div class="carousel-inner">
+        <div class="carousel-item active" style="height: 800px;  background-position: center; background-image: url(); background-size: cover">
+        <img class="d-block w-100" src="../static/images/samble.jpg"style="background-position: center;" alt="First slide">
+        </div>
+        <div class="carousel-item" style="height: 600px; background-image: url(); background-size: cover">
+        <img class="d-block w-100" src="../static/images/team-color.png" alt="Second slide">
+        </div>
+        <div class="carousel-item" style="height: 600px; background-image: url(); background-size: cover">
+        <img class="d-block w-100" src="../static/images/team.png" alt="Third slide">
+    </div>
+        <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+    </center>
+
+    <!--- Jumbotron -->
+    <div class="countainer-fluid">
+    <div class="row jumbotron">
+        <div class="col-xs-12 col-sm-12 col-md-9 col-lg-9 col-xl-10">
+            <p class="lead"> A friendly vegan platform service allows individuals to live a healthier lifestyle
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 col-xl-2">
+            <a href="#"><button type="button" class="btn btn-outline-secondary-btn-lg"> AI Finance</button></a>
+    </div>
+    </div>
+
+    <!--- Welcome Section -->
+    <div class="container-fluid padding">
+    <div class="row welcome text-center">
+        <div class="col-12">
+            <h1 class="display-4"> Built with ease.</h1>
+        </div>
+        <hr>
+        <div class="col-12">
+            <p class="lead"> Welcome to Medscan's website! </p>
+    </div>
+
+
+<!--- Three Column Section -->
+<div class="container-fluid padding">
+<div class="row text-center padding">
+	<div class="col-xs-12 col-sm-6 col-md-4">
+		<i class="fas fa-code"></i>
+		<h3>Medical Imaging</h3>
+		<p> Built with the latest technology </p>
+	</div>
+	<div class="col-xs-12 col-sm-6 col-md-4">
+		<i class="fas fa-bold"></i>
+		<h3>Artificial Intelligence</h3>
+		<p> Optimal neural networks that reduce human bias </p>
+	</div>
+	<div class="col-xs-12 col-sm-6 col-md-4">
+		<i class="fab fa-css3"></i>
+		<h3>Speed</h3>
+		<p> Feedback in a matter of seconds on the diagnosis </p>
+	</div>
+</div>
+<hr class="my-4">
+</div>
+
+
+<!--- Meet the team -->
+<div class="container-fluid padding">
+<div class="row welcome text-center">
+	<div class="col-12">
+		<h1 class="display-4"> Meet the Team </h1>
+	</div>
+	<hr>
+</div>
+</div>
+
+<!--- Cards -->
+<div class="container-fluid padding">
+<div class="row padding">
+	<div class="col-md-4">
+		<div class="card">
+			<img class="card-img-top" src="img/team1.png">
+			<div class="card-body">
+				<h4 class="card-title"> John Doe </h4>
+				<p class="card-text"> John is an internet entrepreneur with 20 years of experience in business.</p>
+				<a href="#" class="btn btn-outline-secondary"> See Profile</a>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-md-4">
+		<div class="card">
+			<img class="card-img-top" src="img/team2.png">
+			<div class="card-body">				
+				<h4 class="card-title"> Mary Jo </h4>
+				<p class="card-text"> Mary is an amazing designer with a multitude of experience in adobe.</p>
+				<a href="#" class="btn btn-outline-secondary"> See Profile</a>
+			</div>
+		</div>
+	</div>
+	<div class="col-md-4">
+		<div class="card">
+			<img class="card-img-top" src="img/team3.png">
+			<div class="card-body">
+				<h4 class="card-title"> Phil Garner </h4>
+				<p class="card-text"> Phil is an amazing people person with lots of experience in marketing.</p>
+				<a href="#" class="btn btn-outline-secondary"> See Profile</a>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+
+<!--- Two Column Section -->
+<div class="container-fluid padding">
+<div class="row padding">
+	<div class="col-lg-6">
+		<h2> Our Philosophy </h2>
+		<p> We know that greatness in a disruptive era requires bold ambition, curious talent and a culture.</p>
+		<p> We approach every challenge hollistically, with best-in-class expertise in data, creativity, media, technology, 
+		search, social and more. </p>
+		<br>
+	</div>
+	<div class="col-lg-6">
+		<img src="img/logo.png" class="img-fluid">
+	 </div>
+</div>
+</div>
+<hr class="my-4">
+</div>
+<!--- Connect -->
+<div class"container-fluid padding">
+<div class="row text-center padding">
+	<div class="col-12">
+		<h2> Connect </h2>
+	</div>
+	<div class="col-12 social padding">
+		<a href="https://www.facebook.com/"><i class="fab fa-facebook"></i></a>
+		<a href="https://www.youtube.com/"><i class="fab fa-youtube"></i></a>
+		<a href="https://twitter.com/home"><i class="fab fa-twitter"></i></a>
+		<a href="https://www.linkedin.com/feed/"><i class="fab fa-linkedin"></i></a>
+		<a href="https://aboutme.google.com/u/0/?referer=gplus"><i class="fab fa-google-plus-g"></i></a>
+	</div>
+</div>
+</div>
+
+
+<!--- Footer -->
+<footer>
+<div class="container-fluid padding">
+<div class="row text-center">
+	<div class="col-md-4">
+		<hr class="light">
+		<h5> Our Information </h5>
+		<hr class="light"> 
+		<p>555-555-5555</p>
+		<p>email@bootstrap.com</p>
+		<p>100 Street Name</p>
+		<p>City, State, 00000</p>
+	</div>
+	<div class="col-md-4">
+		<hr class="light">
+		<h5> Our hours </h5>
+		<hr class="light">
+		<p>Monday: 9am - 5pm</p>
+		<p>Saturday: 10am - 4pm </p>
+		<p>Sunday: closed</p>
+	</div>
+	<div class="col-md-4">
+		<hr class="light">
+		<h5> Our Address </h5>
+		<hr class="light">
+		<p>City, State, 11111</p>
+	</div>
+	<div class="col-12">
+		<hr class="light-100">
+		<h5> wwww.acumeal.com</h5>
+</div>
+</div>
+</footer>
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
+
+
+
+

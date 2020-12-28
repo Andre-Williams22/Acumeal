@@ -15,6 +15,7 @@ import csv
 # loads decision tree model 
 model = pickle.load(open('decisiontree2.pkl', 'rb'))
 rfc = pickle.load(open('random_forest.pkl', 'rb'))
+
 @app.route('/')
 def index():
     page = request.args.get('page', 1, type=int)

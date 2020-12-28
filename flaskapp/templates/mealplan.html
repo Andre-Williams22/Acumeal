@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block meal %}
+
+
+{% endblock meal %}
+
+{% block content %}
+   
+          <h2 class="account-heading"> Welcome, {{ current_user.username }}</h2>
+        <br> 
+          <center><strong> <h3 class=''> First Week </h2> </strong> </center>
+
+        <h3> Breakfast </h3>
+          <p class="text-secondary"><a href='https://www.amazon.com/Oats-AmazonFresh-Grocery/s?k=Oats&rh=n%3A11825099011'>{{ form.breakfast }}</a></p>
+        <h3> Lunch </h3>
+          <p class="text-secondary">{{ form.lunch }}</p>
+        <h3> Snack </h3>
+          <p class="text-secondary">{{ form.snack }}</p>
+        <h3> Dinner </h3>
+          <p class="text-secondary">{{ form.dinner }}</p>
+        <h3> Total Calories </h3>
+          <p class="text-secondary">{{ form.total }}</p>
+
+        
+
+
+{% endblock content %}
